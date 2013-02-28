@@ -80,7 +80,6 @@ static Handle<Value> LogWrapper(const Arguments& args)
     return args[2];
 }
 
-extern "C" void
 init(Handle<Object> target)
 {
     HandleScope scope;
@@ -102,3 +101,4 @@ init(Handle<Object> target)
         cerr << "Script was empty." << endl;
     }
 }
+NODE_MODULE(pmloglib, init)
