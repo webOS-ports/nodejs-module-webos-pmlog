@@ -22,7 +22,7 @@ project(webos-pmlog CXX)
 
 include(webOS/webOS)
 webos_modules_init(1 0 0 QUALIFIER RC2)
-webos_component(2 0 0)
+webos_component(3 0 0)
 
 include(FindPkgConfig)
 
@@ -59,4 +59,5 @@ webos_build_nodejs_module()
 
 # Must have a symlink to the old name until all its users are changed
 webos_install_symlink(${CMAKE_PROJECT_NAME}.node ${WEBOS_INSTALL_LIBDIR}/nodejs/pmloglib.node)
+
 
