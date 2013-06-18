@@ -118,7 +118,7 @@ static Handle<Value> LogKeyValueWrapper(const Arguments& args)
     if (!args[2]->IsNull() && !args[2]->IsUndefined()) {
         mid = *msgId;
     } else {
-        if (level != kPmLogLevel_Debug) {
+        if (logLevel != kPmLogLevel_Debug) {
             return ThrowException(v8::Exception::Error(
                                   v8::String::New("msgId is required for info and higher log levels")));
         }
