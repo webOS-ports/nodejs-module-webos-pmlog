@@ -65,9 +65,20 @@ static void LogString(int level, const char* label, const char *msgId, const cha
         PmLogContext jsContext;
         PmLogGetContext(label, &jsContext);
 
-        PmLogString(jsContext, level, msgId, NULL, stringToLog);
-        cerr << stringToLog << endl;
+	switch(level) {
+	default:
+		PmLogPrintInfo(jsContext, "%s", stringToLog);
+		break;
+	case LOG_WARNING:
+		PmLogPrintWarning(jsContext, "%s", stringToLog);
+		break;
+	case LOG_ERR:
+		PmLogPrintError(jsContext, "%s", stringToLog);
+		break;
+	}
+	cerr << stringToLog << endl;
 }
+
 static void LogKeyValueString(int level, const char *label, const char *msgId, const char *keyValues, const char *freeText)
 {
         PmLogContext jsContext;
