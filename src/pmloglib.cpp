@@ -52,7 +52,7 @@ static void LogKeyValueString(int level, const char *label, const char *msgId, c
         openlog(label, 0, 0);
         sysLogOpened = true;
     }
-    syslog(level, "%s", stringToLog);
+    syslog(level, "%s", freeText);
     if (level == LOG_ERR) {
         cerr << msgId << " " << keyValues << " " << freeText << endl;
     } else {
@@ -151,12 +151,9 @@ init(Handle<Object> target)
     target->Set(String::NewSymbol("_logString"), logFunction->GetFunction());
     Local<FunctionTemplate> logKeyValueFunction = FunctionTemplate::New(LogKeyValueWrapper);
     target->Set(String::NewSymbol("_logKeyValueString"), logKeyValueFunction->GetFunction());
-    target->Set(String::NewSymbol("LOG_EMERGENCY"), Integer::New(kPmLogLevel_Emergency));
-    target->Set(String::NewSymbol("LOG_ALERT"), Integer::New(kPmLogLevel_Alert));
     target->Set(String::NewSymbol("LOG_CRITICAL"), Integer::New(kPmLogLevel_Critical));
     target->Set(String::NewSymbol("LOG_ERR"), Integer::New(kPmLogLevel_Error));
     target->Set(String::NewSymbol("LOG_WARNING"), Integer::New(kPmLogLevel_Warning));
-    target->Set(String::NewSymbol("LOG_NOTICE"), Integer::New(kPmLogLevel_Notice));
     target->Set(String::NewSymbol("LOG_INFO"), Integer::New(kPmLogLevel_Info));
     target->Set(String::NewSymbol("LOG_DEBUG"), Integer::New(kPmLogLevel_Debug));
     Local<String> scriptText = String::New((const char*)pmloglib_js, pmloglib_js_len);
