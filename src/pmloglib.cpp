@@ -106,16 +106,18 @@ static Handle<Value> LogWrapper(const Arguments& args)
 
 static Handle<Value> LogKeyValueWrapper(const Arguments& args)
 {   
-    if (args.Length() != 5) {
+    if (args.Length() < 2) {
         return ThrowException(v8::Exception::Error(
-                                  v8::String::New("Invalid number of parameters, 5 expected.")));
+                                  v8::String::New("Minimum 2 parameters expected")));
+    }
+
+    if (args.Length() > 5) {
+        return ThrowException(v8::Exception::Error(
+                                  v8::String::New("Not more than 5 parameters expected")));
     }
     
     String::Utf8Value label(args[0]);
     int logLevel = args[1]->IntegerValue();
-    String::Utf8Value msgId(args[2]);
-    String::Utf8Value keyValues(args[3]);
-    String::Utf8Value freeText(args[4]);
     const char *mid = NULL;
     const char *kv = NULL;
     const char *ft = NULL;
@@ -125,22 +127,36 @@ static Handle<Value> LogKeyValueWrapper(const Arguments& args)
                                 v8::String::New("Logging level must be an integer")));
     }
 
-    if (!args[2]->IsNull() && !args[2]->IsUndefined()) {
-        mid = *msgId;
-    } else {
-        if (logLevel != kPmLogLevel_Debug) {
+    if(logLevel != kPmLogLevel_Debug) {
+
+	String::Utf8Value msgId(args[2]);
+	String::Utf8Value keyValues(args[3]);
+	String::Utf8Value freeText(args[4]);
+
+        if (!args[2]->IsNull() && !args[2]->IsUndefined()) {
+            mid = *msgId;
+        } else {
             return ThrowException(v8::Exception::Error(
                                   v8::String::New("msgId is required for info and higher log levels")));
         }
+        if (!args[3]->IsNull() && !args[3]->IsUndefined()) {
+            kv = *keyValues;
+        }
+        if (!args[4]->IsNull() && !args[4]->IsUndefined()) {
+            ft = *freeText;
+        }
+	LogKeyValueString(logLevel, *label, mid, kv, ft);
+	return args[4];
     }
-    if (!args[3]->IsNull() && !args[3]->IsUndefined()) {
-        kv = *keyValues;
+    else {
+
+	String::Utf8Value freeText(args[2]);
+        if (!args[2]->IsNull() && !args[2]->IsUndefined()) {
+	    ft = *freeText;
+	}
+        LogKeyValueString(logLevel, *label, mid, kv, ft);
+	return args[2];
     }
-    if (!args[4]->IsNull() && !args[4]->IsUndefined()) {
-        ft = *freeText;
-    }
-    LogKeyValueString(logLevel, *label, mid, kv, ft);
-    return args[4];
 }
 
 extern "C" void
