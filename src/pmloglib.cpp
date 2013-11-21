@@ -83,7 +83,7 @@ static void LogKeyValueString(int level, const char *label, const char *msgId, c
 {
         PmLogContext jsContext;
         PmLogGetContext(label, &jsContext);
-        PmLogString(jsContext, level, msgId, keyValues, freeText);
+        PmLogString(jsContext, static_cast<PmLogLevel>(level), msgId, keyValues, freeText);
         cerr << msgId << " " << keyValues << " " << freeText << endl;
 }
 
