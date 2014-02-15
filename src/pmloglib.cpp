@@ -39,11 +39,6 @@ void LogString(int level, const char* label, const char *msgId, const char* stri
         sysLogOpened = true;
     }
     syslog(level, "%s", stringToLog);
-    if (level == LOG_ERR) {
-        cerr << stringToLog << endl;
-    } else {
-        cout << stringToLog << endl;
-    }
 }
 static void LogKeyValueString(int level, const char *label, const char *msgId, const char *keyValues, const char *freeText)
 {
@@ -52,12 +47,7 @@ static void LogKeyValueString(int level, const char *label, const char *msgId, c
         openlog(label, 0, 0);
         sysLogOpened = true;
     }
-    syslog(level, "%s", freeText);
-    if (level == LOG_ERR) {
-        cerr << msgId << " " << keyValues << " " << freeText << endl;
-    } else {
-        cout << msgId << " " << keyValues << " " << freeText << endl;        
-    }
+    syslog(level, "%s %s %s", msgId, keyValues, freeText);
 }
 #else
 static void LogString(int level, const char* label, const char *msgId, const char* stringToLog)
@@ -76,7 +66,6 @@ static void LogString(int level, const char* label, const char *msgId, const cha
 		PmLogPrintError(jsContext, "%s", stringToLog);
 		break;
 	}
-	cerr << stringToLog << endl;
 }
 
 static void LogKeyValueString(int level, const char *label, const char *msgId, const char *keyValues, const char *freeText)
@@ -84,7 +73,6 @@ static void LogKeyValueString(int level, const char *label, const char *msgId, c
         PmLogContext jsContext;
         PmLogGetContext(label, &jsContext);
         PmLogString(jsContext, static_cast<PmLogLevel>(level), msgId, keyValues, freeText);
-        cerr << msgId << " " << keyValues << " " << freeText << endl;
 }
 
 #endif

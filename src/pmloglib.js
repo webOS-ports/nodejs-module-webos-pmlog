@@ -17,6 +17,7 @@
 // LICENSE@@@
 
 (function(target) {
+	var sysConsole = console;
 	function makeLogFunction (messageLevel, msgId) {
 		function logImplementation () {
 			var stringToLog;
@@ -54,6 +55,7 @@
 	target.warn = makeLogFunction(target.LOG_WARNING, "console.warn");
 	target.info = makeLogFunction(target.LOG_INFO, "console.info");
 	target.log = makeLogFunction(target.LOG_INFO, "console.log");
+	target.dir = makeLogFunction(target.LOG_INFO, "console.dir");
 	target.Context = function(name) {
 		this.contextName = name;
 	};
@@ -79,18 +81,26 @@
 	target.Console.prototype.error = function() {
 		target.name = this.contextName;
 		target.error.apply(target, arguments);
+		sysConsole.error.apply(sysConsole,arguments);
 	};
 	target.Console.prototype.warn = function() {
 		target.name = this.contextName;
 		target.warn.apply(target, arguments);
+		sysConsole.warn.apply(sysConsole,arguments);
 	};
 	target.Console.prototype.info = function() {
 		target.name = this.contextName;
 		target.info.apply(target, arguments);
+		sysConsole.info.apply(sysConsole,arguments);
 	};
 	target.Console.prototype.log = function() {
 		target.name = this.contextName;
 		target.log.apply(target, arguments);
+		sysConsole.log.apply(sysConsole,arguments);
 	};
+	target.Console.prototype.dir = sysConsole.dir;
+	target.Console.prototype.time = sysConsole.time;
+	target.Console.prototype.timeEnd = sysConsole.timeEnd;
+	target.Console.prototype.trace = sysConsole.trace;
+	target.Console.prototype.assert = sysConsole.assert;
 });
-

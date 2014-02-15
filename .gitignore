@@ -33,6 +33,7 @@ patches/
 # Ignore all build directories and their trees. This should exclude all
 # build artifacts.
 BUILD*/
-
+build
+src/pmloglib.js.h
 #gedit backups
 *~
